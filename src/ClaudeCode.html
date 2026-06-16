@@ -1,0 +1,3347 @@
+<!doctype html>
+<html lang="en">
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --blue-900: #0a1628;
+      --blue-800: #0d1f3c;
+      --blue-700: #102850;
+      --blue-600: #1b3f7a;
+      --blue-500: #1e56c0;
+      --blue-400: #2d6fe8;
+      --blue-300: #5b96f7;
+      --blue-100: #ebf2ff;
+      --teal: #00c7be;
+      --white: #ffffff;
+      --gray-50: #f7f9fc;
+      --gray-100: #edf1f7;
+      --gray-200: #d7e0ee;
+      --gray-400: #8a99b3;
+      --gray-600: #4a5568;
+      --gray-800: #1a202c;
+      --shadow-sm: 0 1px 3px rgba(10, 22, 40, 0.08), 0 1px 2px rgba(10, 22, 40, 0.06);
+      --shadow-md: 0 4px 16px rgba(10, 22, 40, 0.1), 0 2px 6px rgba(10, 22, 40, 0.07);
+      --shadow-lg: 0 12px 40px rgba(10, 22, 40, 0.13), 0 4px 14px rgba(10, 22, 40, 0.08);
+      --shadow-xl: 0 24px 64px rgba(10, 22, 40, 0.16);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --radius-xl: 32px;
+      --font-display: 'Sora', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+      --transition: 0.4s var(--ease-out-quart);
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+    body {
+      font-family: var(--font-body);
+      color: var(--gray-800);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+    img {
+      display: block;
+      max-width: 100%;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    ul {
+      list-style: none;
+    }
+    button {
+      cursor: pointer;
+      font-family: var(--font-body);
+      border: none;
+      outline: none;
+    }
+
+    /* ─── UTILITY ─────────────────────────────────────────────── */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .tag {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue-500);
+      background: var(--blue-100);
+      padding: 5px 14px;
+      border-radius: 100px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+      font-weight: 700;
+      color: var(--blue-900);
+      line-height: 1.25;
+    }
+    .section-title em {
+      font-style: normal;
+      color: var(--blue-400);
+    }
+    .section-sub {
+      color: var(--gray-600);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .text-center {
+      text-align: center;
+    }
+
+    /* ─── SCROLL-REVEAL ───────────────────────────────────────── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(36px);
+      transition:
+        opacity 0.7s var(--ease-out-quart),
+        transform 0.7s var(--ease-out-quart);
+    }
+    [data-reveal].visible {
+      opacity: 1;
+      transform: none;
+    }
+    [data-reveal='left'] {
+      transform: translateX(-36px);
+    }
+    [data-reveal='right'] {
+      transform: translateX(36px);
+    }
+    [data-reveal='left'].visible,
+    [data-reveal='right'].visible {
+      transform: none;
+    }
+    [data-delay='1'] {
+      transition-delay: 0.1s;
+    }
+    [data-delay='2'] {
+      transition-delay: 0.2s;
+    }
+    [data-delay='3'] {
+      transition-delay: 0.3s;
+    }
+    [data-delay='4'] {
+      transition-delay: 0.4s;
+    }
+    [data-delay='5'] {
+      transition-delay: 0.5s;
+    }
+    [data-delay='6'] {
+      transition-delay: 0.6s;
+    }
+
+    /* ─── BUTTONS ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.93rem;
+      padding: 12px 26px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.15);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .btn:hover::after {
+      opacity: 1;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue-500), var(--blue-400));
+      color: var(--white);
+      box-shadow: 0 4px 18px rgba(30, 86, 192, 0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(30, 86, 192, 0.42);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--blue-900);
+      border: 1.5px solid var(--gray-200);
+    }
+    .btn-outline:hover {
+      border-color: var(--blue-400);
+      color: var(--blue-400);
+      transform: translateY(-2px);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+    }
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+    }
+    .btn-blue {
+      background: var(--blue-500);
+      color: var(--white);
+      box-shadow: var(--shadow-md);
+    }
+    .btn-blue:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    .btn-blue-outline {
+      background: transparent;
+      color: var(--blue-500);
+      border: 1.5px solid var(--blue-500);
+    }
+    .btn-blue-outline:hover {
+      background: rgba(255, 255, 255, 0.334);
+      transform: translateY(-2px);
+    }
+
+    /* ─── NAVBAR ──────────────────────────────────────────────── */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 18px 0;
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid transparent;
+      transition:
+        padding 0.35s,
+        border-color 0.35s,
+        box-shadow 0.35s;
+    }
+    .navbar.scrolled {
+      padding: 12px 0;
+      border-color: var(--gray-100);
+      box-shadow: 0 4px 24px rgba(10, 22, 40, 0.07);
+    }
+    .navbar-inner {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--blue-900);
+      flex: 1;
+    }
+    .logo-icon {
+      width: 240px;
+      /* background: linear-gradient(135deg, var(--blue-500), var(--blue-400)); */
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* box-shadow: 0 4px 12px rgba(30, 86, 192, 0.3); */
+    }
+    .logo-icon svg {
+      fill: var(--white);
+    }
+    .logo-sub {
+      font-size: 0.62rem;
+      font-weight: 400;
+      color: var(--gray-400);
+      letter-spacing: 0.04em;
+      display: block;
+      line-height: 1;
+      margin-top: -2px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      justify-content: center;
+      flex: 2;
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--gray-600);
+      transition: color 0.25s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--blue-500);
+    }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      justify-content: flex-end;
+    }
+    .nav-signin {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--gray-600);
+      transition: color 0.25s;
+    }
+    .nav-signin:hover {
+      color: var(--blue-500);
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+      position: relative;
+    }
+    .hamburger span {
+      width: 22px;
+      height: 2px;
+      background: var(--blue-900);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+    .hamburger.open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .hamburger.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* ─── MOBILE MENU ───────────────────────────────────────── */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: var(--white);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      padding-top: 120px;
+      transform: translateX(100%);
+      transition: transform 0.5s var(--ease-in-out-quart);
+    }
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+    .mobile-links {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .mobile-links a {
+      font-size: 1.3rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--blue-900);
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    .mobile-menu.active .mobile-links a {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .mobile-links a:nth-child(1) {
+      transition-delay: 0.1s;
+    }
+    .mobile-links a:nth-child(2) {
+      transition-delay: 0.2s;
+    }
+    .mobile-links a:nth-child(3) {
+      transition-delay: 0.3s;
+    }
+
+    .mobile-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: var(--transition);
+      transition-delay: 0.4s;
+    }
+    .mobile-menu.active .mobile-cta {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .mobile-cta .nav-signin {
+      font-size: 1.1rem;
+      text-align: center;
+      font-weight: 600;
+      padding: 12px;
+    }
+    .mobile-cta .btn {
+      justify-content: center;
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 16px;
+    }
+
+    /* ─── HERO ────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(165deg, #f0f5ff 0%, #e8f0fe 35%, #eef4ff 70%, #f7faff 100%);
+      padding: 130px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(45, 111, 232, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: pulse-glow 6s ease-in-out infinite;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: -150px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 199, 190, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: pulse-glow 8s ease-in-out infinite reverse;
+    }
+    @keyframes pulse-glow {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.08);
+        opacity: 0.7;
+      }
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 60px;
+    }
+    .hero-content {
+      z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      padding: 7px 14px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--blue-600);
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-sm);
+      animation: badge-enter 0.8s var(--ease-out-quart) both;
+    }
+    @keyframes badge-enter {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0, 199, 190, 0.25);
+      animation: dot-pulse 2s ease-in-out infinite;
+    }
+    @keyframes dot-pulse {
+      0%,
+      100% {
+        box-shadow: 0 0 0 3px rgba(0, 199, 190, 0.25);
+      }
+      50% {
+        box-shadow: 0 0 0 6px rgba(0, 199, 190, 0.1);
+      }
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.13;
+      color: var(--blue-900);
+      margin-bottom: 20px;
+      animation: hero-title-enter 1s var(--ease-out-quart) 0.15s both;
+    }
+    @keyframes hero-title-enter {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .hero-title span {
+      color: var(--blue-400);
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--gray-600);
+      margin-bottom: 36px;
+      max-width: 480px;
+      animation: hero-title-enter 1s var(--ease-out-quart) 0.3s both;
+    }
+    .hero-cta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      animation: hero-title-enter 1s var(--ease-out-quart) 0.45s both;
+    }
+    .hero-trust {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-top: 48px;
+      flex-wrap: wrap;
+      animation: hero-title-enter 1s var(--ease-out-quart) 0.6s both;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+    .trust-item svg {
+      width: 16px;
+      height: 16px;
+      color: var(--blue-400);
+      flex-shrink: 0;
+    }
+    .hero-visual {
+      position: relative;
+      z-index: 1;
+      animation: hero-visual-enter 1.2s var(--ease-out-quart) 0.2s both;
+    }
+    .hero-visual::before {
+      content: '';
+      position: absolute;
+      top: -140px;
+      right: -140px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(30, 86, 192, 0.55) 0%, transparent 100%);
+      border-radius: 50%;
+      z-index: -1;
+      pointer-events: none;
+      animation: pulse-glow-tr 8s ease-in-out infinite;
+    }
+    .hero-visual::after {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 150px;
+      height: 150px;
+      /* border: 2px solid rgba(30, 86, 192, 0.45); */
+      border-radius: 50%;
+      z-index: -1;
+      pointer-events: none;
+      animation: pulse-glow-tr 8s ease-in-out infinite reverse;
+    }
+    @keyframes pulse-glow-tr {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.08);
+        opacity: 0.7;
+      }
+    }
+    @keyframes hero-visual-enter {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .hero-dashboard {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      box-shadow:
+        var(--shadow-xl),
+        0 0 0 1px rgba(10, 22, 40, 0.05);
+      overflow: auto;
+    }
+    .dash-header {
+      padding: 14px 20px;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dash-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dash-dot.red {
+      background: #ff5f57;
+    }
+    .dash-dot.yellow {
+      background: #ffbd2e;
+    }
+    .dash-dot.green {
+      background: #28ca41;
+    }
+    .dash-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #000000;
+      margin-left: 8px;
+      font-family: var(--font-display);
+    }
+    .dash-body {
+      padding: 15px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .dash-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+    .dash-top {
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--gray-50);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dash-search {
+      background: var(--gray-50);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.65rem;
+      color: var(--gray-400);
+      width: 180px;
+      border: 1px solid var(--gray-100);
+    }
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 12px;
+      border: 1px solid var(--gray-100);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .stat-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stat-icon svg {
+      width: 14px;
+      height: 14px;
+    }
+    .stat-icon.blue {
+      background: rgba(30, 86, 192, 0.08);
+      color: var(--blue-600);
+    }
+    .stat-icon.green {
+      background: rgba(34, 197, 94, 0.08);
+      color: #16a34a;
+    }
+    .stat-icon.purple {
+      background: rgba(147, 51, 234, 0.08);
+      color: #9333ea;
+    }
+    .stat-icon.orange {
+      background: rgba(249, 115, 22, 0.08);
+      color: #ea580c;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--gray-400);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .stat-val {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--blue-900);
+    }
+    .stat-change {
+      font-size: 0.65rem;
+      color: #22c55e;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .dash-sidebar {
+      background: #183cab;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 18px;
+      width: 50px;
+    }
+    .sb-item {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.4);
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    .sb-item:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .sb-item.active {
+      background: var(--blue-600);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(30, 86, 192, 0.3);
+    }
+    .sb-item svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .dash-grid-2 {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    .chart-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid var(--gray-100);
+    }
+    .chart-card h3,
+    .table-card h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--blue-900);
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .table-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid var(--gray-100);
+    }
+    .dash-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .dash-table th {
+      text-align: left;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-400);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-50);
+    }
+    .dash-table td {
+      padding: 10px 0;
+      font-size: 0.68rem;
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-50);
+    }
+    .status-badge {
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 0.6rem;
+      font-weight: 600;
+    }
+    .status-badge.active {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .status-badge.review {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .status-badge.pending {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.68rem;
+      color: var(--gray-600);
+    }
+    .activity-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--blue-400);
+      flex-shrink: 0;
+    }
+    .activity-time {
+      color: var(--gray-400);
+      margin-left: auto;
+    }
+    .hero-phone {
+      position: absolute;
+      bottom: -40px;
+      right: -30px;
+      z-index: 50;
+      width: 160px;
+      height: 320px !important;
+      border: 12px solid #0a1628 !important;
+      background: var(--white);
+      border-radius: 36px;
+      padding: 15px;
+      box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(10, 22, 40, 0.06);
+      animation: phone-float 5s ease-in-out infinite;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    @keyframes phone-float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    .phone-stat {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .phone-stat-item {
+      text-align: center;
+    }
+    .phone-stat-num {
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--blue-900);
+    }
+    .phone-stat-label {
+      font-size: 0.55rem;
+      color: var(--gray-400);
+    }
+    .phone-bar {
+      height: 4px;
+      background: var(--gray-100);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .phone-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blue-400), var(--teal));
+      border-radius: 2px;
+      transition: width 2s var(--ease-out-quart);
+    }
+
+    /* ─── FEATURES STRIP ─────────────────────────────────────── */
+    .features-strip {
+      padding: 70px 0;
+      background: var(--white);
+    }
+    .features-strip-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--gray-600);
+      text-align: center;
+      margin-bottom: 44px;
+      letter-spacing: 0.01em;
+    }
+    .features-strip-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+    }
+    .feat-cell {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-100);
+      padding: 28px 20px;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .feat-cell:first-child {
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    }
+    .feat-cell:last-child {
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .feat-cell:hover {
+      background: var(--blue-100);
+      z-index: 1;
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .feat-cell:hover .feat-icon {
+      color: var(--blue-400);
+    }
+    .feat-icon {
+      font-size: 1.7rem;
+      margin-bottom: 12px;
+      transition: var(--transition);
+    }
+    .feat-cell h4 {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--blue-900);
+      margin-bottom: 7px;
+    }
+    .feat-cell p {
+      font-size: 0.7rem;
+      color: var(--gray-600);
+      line-height: 1.5;
+    }
+
+    /* ─── ECOSYSTEM SECTION ──────────────────────────────────── */
+    .ecosystem {
+      padding: 100px 0;
+      background: var(--gray-50);
+    }
+    .eco-header {
+      text-align: center;
+      margin-bottom: 70px;
+    }
+    .eco-header .section-title {
+      margin: 14px 0 16px;
+    }
+    .portals {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .portal-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 60px;
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 48px 52px;
+      border: 1px solid var(--gray-100);
+      box-shadow: var(--shadow-sm);
+      transition:
+        box-shadow 0.4s,
+        transform 0.4s;
+    }
+    .portal-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+    .portal-card.reverse {
+      direction: rtl;
+    }
+    .portal-card.reverse > * {
+      direction: ltr;
+    }
+    .portal-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 18px;
+    }
+    .portal-badge.blue {
+      background: var(--blue-100);
+    }
+    .portal-badge.teal {
+      background: rgba(0, 199, 190, 0.12);
+    }
+    .portal-badge.purple {
+      background: rgba(124, 77, 255, 0.1);
+    }
+    .portal-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--blue-900);
+      margin-bottom: 10px;
+    }
+    .portal-desc {
+      font-size: 0.94rem;
+      color: var(--gray-600);
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+    .portal-features {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-bottom: 28px;
+    }
+    .portal-feat {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: var(--gray-700);
+    }
+    .portal-feat::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--blue-400);
+      flex-shrink: 0;
+    }
+    .portal-screen {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow:
+        var(--shadow-xl),
+        0 0 0 1px rgba(10, 22, 40, 0.06);
+      background: var(--white);
+    }
+    .screen-bar {
+      background: var(--blue-900);
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .screen-bar span {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+    .screen-bar span:nth-child(1) {
+      background: #ff5f57;
+    }
+    .screen-bar span:nth-child(2) {
+      background: #ffbd2e;
+    }
+    .screen-bar span:nth-child(3) {
+      background: #28ca41;
+    }
+    .screen-bar-title {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-left: 8px;
+      font-family: var(--font-display);
+    }
+    .screen-content {
+      padding: 18px;
+    }
+    .screen-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .screen-table th {
+      background: var(--gray-50);
+      padding: 8px 10px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--gray-400);
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .screen-table td {
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 100px;
+      font-size: 0.62rem;
+      font-weight: 600;
+    }
+    .status-badge.active {
+      background: rgba(34, 197, 94, 0.12);
+      color: #16a34a;
+    }
+    .status-badge.pending {
+      background: rgba(234, 179, 8, 0.12);
+      color: #b45309;
+    }
+    .status-badge.review {
+      background: rgba(59, 130, 246, 0.12);
+      color: var(--blue-500);
+    }
+
+    /* ─── WHY SECTION ────────────────────────────────────────── */
+    .why {
+      padding-top: 100px;
+      background: var(--white);
+    }
+    .why-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .why-header .section-title {
+      margin: 14px 0 16px;
+    }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .why-card {
+      background: var(--gray-50);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      border: 1px solid var(--gray-100);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .why-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue-500), var(--blue-300));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.45s var(--ease-out-quart);
+    }
+    /* .why-card:hover::before {
+      transform: scaleX(1);
+    }
+    .why-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+      background: var(--white);
+    } */
+    .why-card:hover {
+      transform: translateY(-20px);
+      background: #fff;
+      box-shadow: 0 40px 80px rgba(10, 22, 40, 0.08);
+      border-color: var(--primary);
+    }
+    .why-num {
+      font-family: var(--font-display);
+      font-size: 4.5rem;
+      font-weight: 800;
+      color: #d7e4f2;
+      margin-bottom: 32px;
+      line-height: 1;
+      transition: 0.5s;
+    }
+    .why-card:hover .why-num {
+      color: var(--blue-400);
+      transform: translateX(10px);
+    }
+    /* .why-num {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--gray-200);
+      line-height: 1;
+      margin-bottom: 20px;
+      transition: color 0.4s;
+    }
+    .why-card:hover .why-num {
+      color: var(--blue-100);
+    }
+    .why-card h4 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--blue-900);
+      margin-bottom: 10px;
+    } */
+    .why-card p {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      line-height: 1.7;
+    }
+
+    /* ─── LOGOS ──────────────────────────────────────────────── */
+    .logos {
+      padding: 64px 0;
+      background: var(--white);
+    }
+    .logos-label {
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-400);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .logos-track {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .logo-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--gray-400);
+      transition: color 0.3s;
+      white-space: nowrap;
+    }
+    .logo-item:hover {
+      color: var(--gray-600);
+    }
+    .logo-item-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    /* ─── CTA SECTION ────────────────────────────────────────── */
+    .cta-section {
+      max-width: 1180px;
+      margin: 0 auto;
+      border-radius: 20px;
+      padding: 20px 0;
+      background: #c8d7fd;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .cta-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: nowrap;
+      position: relative;
+      z-index: 1;
+    }
+    .cta-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .cta-rocket {
+      width: 100px;
+      height: 100px;
+      padding: 20px;
+      background: var(--white);
+      border: 2px solid var(--blue-400);
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      animation: rocket-bounce 3s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes rocket-bounce {
+      0%,
+      100% {
+        transform: translateY(0) rotate(-5deg);
+      }
+      50% {
+        transform: translateY(-8px) rotate(5deg);
+      }
+    }
+    .cta-text h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--blue-500);
+      margin-bottom: 8px;
+    }
+    .cta-text p {
+      font-size: 0.92rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+      max-width: 420px;
+    }
+    .cta-btns {
+      flex-shrink: 0;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      background: var(--white);
+      padding: 70px 0 40px;
+      color: var(--gray-600);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr 1.4fr;
+      gap: 40px;
+      margin-bottom: 56px;
+    }
+    .footer-logo {
+      margin-bottom: 16px;
+    }
+    .footer-about {
+      font-size: 0.83rem;
+      line-height: 1.75;
+      color: var(--gray-600);
+      margin-bottom: 24px;
+    }
+    .footer-socials {
+      display: flex;
+      gap: 10px;
+    }
+    .social-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--blue-400);
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      transition:
+        background 0.25s,
+        transform 0.25s;
+      color: var(--blue-400);
+    }
+    .social-btn:hover {
+      color: var(--white);
+      background: var(--blue-400);
+      border-radius: 100%;
+      transform: translateY(-2px);
+    }
+    .footer-col h5 {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+    .footer-col ul {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-col ul a {
+      font-size: 0.83rem;
+      color: var(--gray-600);
+      transition: color 0.25s;
+    }
+    .footer-col ul a:hover {
+      color: var(--gray-800);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+    .footer-newsletter h5 {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+    .footer-newsletter p {
+      font-size: 0.82rem;
+      color: var(--gray-600) s;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 0;
+    }
+    .newsletter-form input {
+      flex: 1;
+      padding: 11px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--blue-500);
+      border-right: none;
+      border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+      color: var(--gray-600);
+      font-size: 0.83rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: border-color 0.25s;
+    }
+    .newsletter-form input:focus {
+      border-color: var(--blue-400);
+    }
+    .newsletter-form input::placeholder {
+      color: var(--gray-400);
+    }
+    .newsletter-form button {
+      padding: 11px 16px;
+      background: var(--blue-400);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--white);
+      transition: background 0.25s;
+    }
+    .newsletter-form button:hover {
+      background: var(--blue-300);
+    }
+    .footer-bottom {
+      padding-top: 32px;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-bottom p {
+      font-size: 0.78rem;
+      color: var(--gray-600);
+    }
+
+    /* ─── COUNTER ANIMATION ──────────────────────────────────── */
+    .count-up {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .hero-visual {
+        max-width: 580px;
+        margin: 0 auto;
+      }
+      .features-strip-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .portal-card {
+        grid-template-columns: 1fr;
+      }
+      .portal-card.reverse {
+        direction: ltr;
+      }
+      .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 768px) {
+      .nav-links,
+      .nav-cta {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+        margin-left: auto;
+      }
+      .features-strip-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+      .cta-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+      .cta-left {
+        flex-direction: column;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+      .dash-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero-phone {
+        display: none;
+      }
+    }
+    @media (max-width: 480px) {
+      .features-strip-grid {
+        grid-template-columns: 1fr;
+      }
+      .portal-card {
+        padding: 28px 24px;
+      }
+    }
+  </style>
+  <style>
+    /* ─── Chart ─────────────────────────────────────────── */
+    .chart-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .donut-container {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 20px auto;
+    }
+
+    .donut-chart {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .bg {
+      fill: none;
+      stroke: #edf1f7;
+      stroke-width: 12;
+    }
+
+    .segment {
+      fill: none;
+      stroke-width: 12;
+      stroke-linecap: round;
+
+      stroke-dasharray: 282.74;
+      stroke-dashoffset: 282.74;
+
+      transition: stroke-dashoffset 1.2s ease;
+    }
+
+    .segment-1 {
+      stroke: #2d6fe8;
+    }
+
+    .segment-2 {
+      stroke: #5b96f7;
+    }
+
+    .segment-3 {
+      stroke: #00c7be;
+    }
+
+    .segment-4 {
+      stroke: #d7e0ee;
+    }
+
+    .center-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .center-text span {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .legend {
+      margin-top: 20px;
+    }
+
+    .legend div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .legend span {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .blue {
+      background: #2d6fe8;
+    }
+
+    .light-blue {
+      background: #5b96f7;
+    }
+
+    .teal {
+      background: #00c7be;
+    }
+
+    .gray {
+      background: #d7e0ee;
+    }
+
+    /* --- ANIMATED LINE CHART --- */
+    .line-chart-container {
+      width: 100%;
+      height: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .line-chart-svg {
+      width: 100%;
+      height: 100%;
+    }
+    .chart-line {
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 400;
+      stroke-dashoffset: 400;
+    }
+    .visible .chart-line {
+      animation: draw-line 2.5s ease-out forwards;
+    }
+    .chart-line-blue {
+      stroke: var(--blue-400);
+    }
+    .chart-line-teal {
+      stroke: var(--teal);
+    }
+
+    .chart-area {
+      fill: url(#gradient-blue);
+      opacity: 0;
+    }
+    .visible .chart-area {
+      animation: fade-in 1s ease-out 1.5s forwards;
+    }
+    .chart-area-teal {
+      fill: url(#gradient-teal);
+    }
+
+    @keyframes draw-line {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes fade-in {
+      to {
+        opacity: 0.15;
+      }
+    }
+
+    /* --- HARDWARE MOCKUPS --- */
+    .v-box {
+      position: relative;
+      perspective: 1000px;
+    }
+    .mac-wrap {
+      width: 100%;
+      /* transform: rotateY(-5deg) rotateX(2deg);
+      transition: 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); */
+    }
+    /* .v-box:hover .mac-wrap {
+      transform: rotateY(0) rotateX(0);
+    } */
+    .mac-bezel {
+      background: #0a1628;
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid #1e293b;
+    }
+    .mac-screen {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 1.6 / 1;
+      display: grid;
+      grid-template-columns: 85px 1fr;
+    }
+    .mac-base {
+      height: 20px;
+      background: linear-gradient(to bottom, #cbd5e1, #94a3b8);
+      border-radius: 0 0 160px 140px;
+      width: 112%;
+      margin-left: -6%;
+      margin-top: -4px;
+      border-bottom: 5px solid #64748b;
+    }
+  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CaseClinical – Smarter Documentation. Better Patient Outcomes.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- ─── NAVBAR ──────────────────────────────────────────── -->
+    <nav class="navbar" id="navbar">
+      <div class="container navbar-inner">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <img
+              src="https://lwfiles.mycourse.app/6998c1942ae00ea301e17455-public/587ab8599acf12d5cecfd46cde144437.png"
+              alt="CaseClinical Logo"
+            />
+          </div>
+          <!-- <div>
+            CaseClinical<br />
+            <span class="logo-sub">Documentation · By LearnWorlds</span>
+          </div> -->
+        </a>
+
+        <div class="nav-links">
+          <a href="#" class="active">Home</a>
+          <a href="#ecosystem">Documentation</a>
+          <a href="#why">Resources</a>
+          <a href="#" class="nav-signin">Sign In</a>
+        </div>
+
+        <div class="nav-cta">
+          <a href="#" class="btn btn-primary">Sign Up</a>
+        </div>
+
+        <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobile-menu">
+        <div class="container">
+          <div class="mobile-links">
+            <a href="#" class="active">Home</a>
+            <a href="#ecosystem">Documentation</a>
+            <a href="#why">Resources</a>
+          </div>
+          <div class="mobile-cta">
+            <a href="#" class="nav-signin">Sign In</a>
+            <a href="#" class="btn btn-primary">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ─── HERO ─────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            Trusted by 10,000+ Healthcare Professionals
+          </div>
+          <h1 class="hero-title">
+            Smarter Documentation.<br />
+            <span>Better Patient Outcomes.</span>
+          </h1>
+          <p class="hero-desc">
+            CaseClinical is the all-in-one documentation platform for healthcare professionals.
+            Streamline case management, connect your team, and deliver better care—every step of the
+            way.
+          </p>
+          <div class="hero-cta">
+            <a href="#" class="btn btn-primary">Get Started Free</a>
+            <a href="#ecosystem" class="btn btn-outline">Explore Documentation</a>
+          </div>
+          <div class="hero-trust">
+            <div class="trust-item">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Secure & Compliant
+            </div>
+            <div class="trust-item">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <path d="M8 21h8M12 17v4" />
+              </svg>
+              Cloud Based
+            </div>
+            <div class="trust-item">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+              </svg>
+              Built for Healthcare
+            </div>
+            <div class="trust-item">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              >
+                <circle cx="18" cy="18" r="3" />
+                <circle cx="6" cy="6" r="3" />
+                <path d="M18 9V7a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v9" />
+              </svg>
+              Seamless Integration
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="v-box">
+            <div class="hero-phone">
+              <div
+                style="
+                  width: 50px;
+                  height: 14px;
+                  background: #0a1628;
+                  position: absolute;
+                  top: 0;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  border-radius: 0 0 8px 8px;
+                  z-index: 2;
+                "
+              ></div>
+              <div
+                style="
+                  font-family: var(--font-display);
+                  font-size: 0.62rem;
+                  font-weight: 700;
+                  color: var(--blue-900);
+                  margin-bottom: 10px;
+                "
+              >
+                Case Overview
+              </div>
+              <div class="phone-stat">
+                <div class="phone-stat-item">
+                  <div class="phone-stat-num">12</div>
+                  <div class="phone-stat-label">Documents</div>
+                </div>
+                <div class="phone-stat-item">
+                  <div class="phone-stat-num">4</div>
+                  <div class="phone-stat-label">Tasks</div>
+                </div>
+                <div class="phone-stat-item">
+                  <div class="phone-stat-num">8</div>
+                  <div class="phone-stat-label">Notes</div>
+                </div>
+              </div>
+              <div style="margin: 10px 0 4px; font-size: 0.55rem; color: var(--gray-400)">
+                Case Progress
+              </div>
+              <div class="phone-bar">
+                <div class="phone-bar-fill" id="phone-bar-fill" style="width: 0%"></div>
+              </div>
+              <div
+                style="
+                  font-size: 0.55rem;
+                  color: var(--blue-400);
+                  font-weight: 600;
+                  margin-top: 4px;
+                  text-align: right;
+                "
+              >
+                78% Complete
+              </div>
+              <div
+                style="
+                  margin-top: 10px;
+                  padding: 7px;
+                  background: rgba(0, 199, 190, 0.08);
+                  border-radius: 6px;
+                  border: 1px solid rgba(0, 199, 190, 0.2);
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.62rem;
+                    font-weight: 600;
+                    color: var(--blue-900);
+                    margin-bottom: 3px;
+                  "
+                >
+                  Status: Active
+                </div>
+                <div style="font-size: 0.6rem; color: var(--gray-400)">
+                  Last updated: Today, 9:41 AM
+                </div>
+              </div>
+            </div>
+
+            <div class="mac-wrap">
+              <div class="mac-bezel">
+                <div class="mac-screen" style="grid-template-columns: 1fr; background: #f8fafc">
+                  <div
+                    class="hero-dashboard"
+                    style="
+                      height: 100%;
+                      border-radius: 0;
+                      box-shadow: none;
+                      display: flex;
+                      flex-direction: column;
+                    "
+                  >
+                    <div class="dash-header">
+                      <div class="dash-dot red"></div>
+                      <div class="dash-dot yellow"></div>
+                      <div class="dash-dot green"></div>
+                      <span class="dash-title">CaseClinical</span>
+                    </div>
+                    <div style="display: flex; flex: 1; overflow: hidden">
+                      <div class="dash-sidebar">
+                        <div class="sb-item active">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item" style="margin-top: auto">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="dash-main">
+                        <div class="dash-top">
+                          <div class="dash-search">Search cases, docs...</div>
+                          <div style="display: flex; align-items: center; gap: 8px">
+                            <div
+                              class="sb-item"
+                              style="color: var(--gray-400); width: 24px; height: 24px"
+                            >
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <path
+                                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                                />
+                              </svg>
+                            </div>
+                            <div
+                              style="
+                                width: 22px;
+                                height: 22px;
+                                border-radius: 50%;
+                                background: #e2e8f0;
+                                border: 1px solid var(--gray-100);
+                              "
+                            ></div>
+                          </div>
+                        </div>
+                        <div class="dash-body">
+                          <div class="dash-stats">
+                            <div class="stat-card">
+                              <div class="stat-header">
+                                <div class="stat-icon blue">
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                  >
+                                    <path
+                                      d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+                                    />
+                                  </svg>
+                                </div>
+                                <div class="stat-change">↑ 12%</div>
+                              </div>
+                              <div class="stat-label">Total Cases</div>
+                              <div class="stat-val count-up" data-target="1248">0</div>
+                            </div>
+                            <div class="stat-card">
+                              <div class="stat-header">
+                                <div class="stat-icon green">
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                  >
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                </div>
+                                <div class="stat-change">↑ 8%</div>
+                              </div>
+                              <div class="stat-label">Open Cases</div>
+                              <div class="stat-val count-up" data-target="342">0</div>
+                            </div>
+                            <div class="stat-card">
+                              <div class="stat-header">
+                                <div class="stat-icon purple">
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                  >
+                                    <path
+                                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                                    />
+                                  </svg>
+                                </div>
+                                <div class="stat-change">↑ 15%</div>
+                              </div>
+                              <div class="stat-label">Documents</div>
+                              <div class="stat-val count-up" data-target="2856">0</div>
+                            </div>
+                            <div class="stat-card">
+                              <div class="stat-header">
+                                <div class="stat-icon orange">
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                  >
+                                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  </svg>
+                                </div>
+                                <div class="stat-change">↑ 5%</div>
+                              </div>
+                              <div class="stat-label">Tasks</div>
+                              <div class="stat-val count-up" data-target="96">0</div>
+                            </div>
+                          </div>
+                          <div class="dash-grid-2">
+                            <div class="chart-card">
+                              <h3>Case Status Overview</h3>
+                              <div class="donut-container">
+                                <svg class="donut-chart" viewBox="0 0 120 120">
+                                  <circle class="bg" cx="60" cy="60" r="45" />
+                                  <circle
+                                    class="segment segment-1"
+                                    cx="60"
+                                    cy="60"
+                                    r="45"
+                                    data-percent="40"
+                                  />
+                                  <circle
+                                    class="segment segment-2"
+                                    cx="60"
+                                    cy="60"
+                                    r="45"
+                                    data-percent="25"
+                                  />
+                                  <circle
+                                    class="segment segment-3"
+                                    cx="60"
+                                    cy="60"
+                                    r="45"
+                                    data-percent="20"
+                                  />
+                                  <circle
+                                    class="segment segment-4"
+                                    cx="60"
+                                    cy="60"
+                                    r="45"
+                                    data-percent="15"
+                                  />
+                                </svg>
+                                <div class="center-text"><span>100%</span></div>
+                              </div>
+                              <div class="legend">
+                                <div><span class="blue"></span> Open (40%)</div>
+                                <div><span class="light-blue"></span>In Progress (25%)</div>
+                                <div><span class="teal"></span> Review (20%)</div>
+                                <div><span class="gray"></span> Closed (15%)</div>
+                              </div>
+                            </div>
+                            <div class="table-card">
+                              <h3>Recent Activity</h3>
+                              <div class="activity-list">
+                                <div class="activity-item">
+                                  <div class="activity-dot"></div>
+                                  <span>Case #1248 updated</span>
+                                  <span class="activity-time">2m ago</span>
+                                </div>
+                                <div class="activity-item">
+                                  <div class="activity-dot"></div>
+                                  <span>Document uploaded</span>
+                                  <span class="activity-time">15m ago</span>
+                                </div>
+                                <div class="activity-item">
+                                  <div class="activity-dot"></div>
+                                  <span>New task assigned</span>
+                                  <span class="activity-time">1h ago</span>
+                                </div>
+                                <div class="activity-item">
+                                  <div class="activity-dot" style="background: #94a3b8"></div>
+                                  <span>Report generated</span>
+                                  <span class="activity-time">3h ago</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="table-card" style="margin-bottom: 0">
+                            <h3>Recent Cases</h3>
+                            <table class="dash-table">
+                              <thead>
+                                <tr>
+                                  <th>Case Name</th>
+                                  <th>Status</th>
+                                  <th>Last Activity</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Johnson v. Medical Group</td>
+                                  <td><span class="status-badge active">Active</span></td>
+                                  <td>2 mins ago</td>
+                                </tr>
+                                <tr>
+                                  <td>Smith Liability Review</td>
+                                  <td><span class="status-badge review">Review</span></td>
+                                  <td>1 hour ago</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mac-base"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FEATURES STRIP ─────────────────────────────────── -->
+    <section class="features-strip">
+      <div class="container">
+        <p class="features-strip-title">Built for Healthcare. Designed for Impact.</p>
+        <div class="features-strip-grid">
+          <div class="feat-cell" data-reveal data-delay="1">
+            <div class="feat-icon">🛡️</div>
+            <h4>Improve Compliance</h4>
+            <p>Meet regulatory requirements with confidence and ease.</p>
+          </div>
+          <div class="feat-cell" data-reveal data-delay="2">
+            <div class="feat-icon">⏱️</div>
+            <h4>Save Time</h4>
+            <p>Automate workflows and reduce administrative tasks.</p>
+          </div>
+          <div class="feat-cell" data-reveal data-delay="3">
+            <div class="feat-icon">👥</div>
+            <h4>Collaborate Seamlessly</h4>
+            <p>Connect teams and share information securely.</p>
+          </div>
+          <div class="feat-cell" data-reveal data-delay="4">
+            <div class="feat-icon">🔒</div>
+            <h4>Enterprise Security</h4>
+            <p>Bank-level encryption and role-based access.</p>
+          </div>
+          <div class="feat-cell" data-reveal data-delay="5">
+            <div class="feat-icon">📊</div>
+            <h4>Data-Driven Insights</h4>
+            <p>Make informed decisions with real-time reporting.</p>
+          </div>
+          <div class="feat-cell" data-reveal data-delay="6">
+            <div class="feat-icon">🔗</div>
+            <h4>Integrate Effortlessly</h4>
+            <p>Connect with your existing tools and systems.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── ECOSYSTEM ─────────────────────────────────────────── -->
+    <section class="ecosystem" id="ecosystem">
+      <div class="container">
+        <div class="eco-header" data-reveal>
+          <span class="tag">Three Portals</span>
+          <h2 class="section-title" style="margin-top: 14px">One Connected <em>EcoSystem.</em></h2>
+        </div>
+
+        <div class="portals">
+          <!-- Attorney Portal -->
+          <div class="portal-card" data-reveal>
+            <div class="portal-info">
+              <div class="portal-badge blue">🗂️</div>
+              <h3 class="portal-title">Attorney Portal</h3>
+              <p class="portal-desc">
+                Manage cases, collaborate with your team, and track every detail from intake to
+                resolution.
+              </p>
+              <ul class="portal-features">
+                <li class="portal-feat">Full case lifecycle management</li>
+                <li class="portal-feat">Secure document management & e-signatures</li>
+                <li class="portal-feat">Task management & deadlines</li>
+                <li class="portal-feat">Custom dashboards & reporting</li>
+                <li class="portal-feat">Billing & time tracking integration</li>
+              </ul>
+              <a href="#" class="btn btn-primary">Explore Attorney Portal</a>
+            </div>
+            <div class="v-box">
+              <div class="mac-bezel" style="width: 100%">
+                <div class="mac-screen" style="grid-template-columns: 1fr; background: #f8fafc">
+                  <div
+                    class="hero-dashboard"
+                    style="
+                      height: 100%;
+                      border-radius: 0;
+                      box-shadow: none;
+                      display: flex;
+                      flex-direction: column;
+                    "
+                  >
+                    <div class="dash-header">
+                      <div class="dash-dot red"></div>
+                      <div class="dash-dot yellow"></div>
+                      <div class="dash-dot green"></div>
+                      <span class="dash-title">Attorney Portal</span>
+                    </div>
+                    <div style="display: flex; flex: 1; overflow: hidden">
+                      <div class="dash-sidebar" style="width: 40px; padding: 15px 0; gap: 12px">
+                        <div class="sb-item active" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="dash-main">
+                        <div class="dash-top" style="padding: 8px 12px">
+                          <div class="dash-search" style="width: 140px; font-size: 0.6rem">
+                            Search cases...
+                          </div>
+                          <div
+                            style="
+                              width: 18px;
+                              height: 18px;
+                              border-radius: 50%;
+                              background: #e2e8f0;
+                            "
+                          ></div>
+                        </div>
+                        <div class="dash-body" style="padding: 10px">
+                          <div
+                            class="dash-stats"
+                            style="
+                              grid-template-columns: repeat(4, 1fr);
+                              gap: 6px;
+                              margin-bottom: 10px;
+                            "
+                          >
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Total Cases</div>
+                              <div class="stat-val" style="font-size: 0.9rem">1,248</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Open Cases</div>
+                              <div class="stat-val" style="font-size: 0.9rem">342</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Docs</div>
+                              <div class="stat-val" style="font-size: 0.9rem">2,856</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Tasks</div>
+                              <div class="stat-val" style="font-size: 0.9rem">96</div>
+                            </div>
+                          </div>
+                          <div class="dash-grid-2" style="gap: 8px; margin-bottom: 10px">
+                            <div class="chart-card" style="padding: 10px">
+                              <h3 style="font-size: 0.6rem; margin-bottom: 8px">Status Overview</h3>
+                              <div class="line-chart-container">
+                                <svg class="line-chart-svg" viewBox="0 0 200 60">
+                                  <defs>
+                                    <linearGradient id="gradient-blue" x1="0" y1="0" x2="0" y2="1">
+                                      <stop offset="0%" stop-color="var(--blue-400)" />
+                                      <stop
+                                        offset="100%"
+                                        stop-color="var(--blue-400)"
+                                        stop-opacity="0"
+                                      />
+                                    </linearGradient>
+                                  </defs>
+                                  <path
+                                    class="chart-area"
+                                    d="M0,60 L0,45 Q25,30 50,40 T100,20 T150,35 T200,10 L200,60 Z"
+                                  />
+                                  <path
+                                    class="chart-line chart-line-blue"
+                                    d="M0,45 Q25,30 50,40 T100,20 T150,35 T200,10"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
+                            <div class="table-card" style="padding: 10px">
+                              <h3 style="font-size: 0.6rem; margin-bottom: 8px">Recent Activity</h3>
+                              <div style="display: flex; flex-direction: column; gap: 4px">
+                                <div style="font-size: 0.55rem; color: #64748b">
+                                  • Case #1248 updated
+                                </div>
+                                <div style="font-size: 0.55rem; color: #64748b">• Doc uploaded</div>
+                                <div style="font-size: 0.55rem; color: #64748b">
+                                  • Task assigned
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="table-card" style="padding: 10px">
+                            <h3 style="font-size: 0.6rem; margin-bottom: 6px">Recent Cases</h3>
+                            <table class="dash-table">
+                              <thead>
+                                <tr>
+                                  <th style="font-size: 0.5rem">Name</th>
+                                  <th style="font-size: 0.5rem">Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td style="font-size: 0.55rem">Johnson v. Med</td>
+                                  <td>
+                                    <span
+                                      class="status-badge active"
+                                      style="font-size: 0.45rem; padding: 1px 4px"
+                                      >Active</span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="font-size: 0.55rem">Smith Review</td>
+                                  <td>
+                                    <span
+                                      class="status-badge review"
+                                      style="font-size: 0.45rem; padding: 1px 4px"
+                                      >Review</span
+                                    >
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mac-base"></div>
+            </div>
+          </div>
+
+          <!-- Provider Portal -->
+          <div class="portal-card reverse" data-reveal>
+            <div class="portal-info">
+              <div class="portal-badge teal">🏥</div>
+              <h3 class="portal-title">Provider Portal</h3>
+              <p class="portal-desc">
+                Coordinate care, manage referrals, and communicate securely across your network.
+              </p>
+              <ul class="portal-features">
+                <li class="portal-feat">Referral & authorizations management</li>
+                <li class="portal-feat">Real-time case updates</li>
+                <li class="portal-feat">Secure messaging & notifications</li>
+                <li class="portal-feat">Document uploads & forms</li>
+                <li class="portal-feat">Care plan & notes management</li>
+              </ul>
+              <a href="#" class="btn btn-primary">Explore Provider Portal</a>
+            </div>
+            <div class="v-box">
+              <div class="mac-bezel" style="width: 100%">
+                <div class="mac-screen" style="grid-template-columns: 1fr; background: #f8fafc">
+                  <div
+                    class="hero-dashboard"
+                    style="
+                      height: 100%;
+                      border-radius: 0;
+                      box-shadow: none;
+                      display: flex;
+                      flex-direction: column;
+                    "
+                  >
+                    <div class="dash-header">
+                      <div class="dash-dot red"></div>
+                      <div class="dash-dot yellow"></div>
+                      <div class="dash-dot green"></div>
+                      <span class="dash-title">Provider Portal</span>
+                    </div>
+                    <div style="display: flex; flex: 1; overflow: hidden">
+                      <div class="dash-sidebar" style="width: 40px; padding: 15px 0; gap: 12px">
+                        <div class="sb-item active" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="dash-main">
+                        <div class="dash-top" style="padding: 8px 12px">
+                          <div class="dash-search" style="width: 140px; font-size: 0.6rem">
+                            Search referrals...
+                          </div>
+                          <div
+                            style="
+                              width: 18px;
+                              height: 18px;
+                              border-radius: 50%;
+                              background: #e2e8f0;
+                            "
+                          ></div>
+                        </div>
+                        <div class="dash-body" style="padding: 10px">
+                          <div
+                            class="dash-stats"
+                            style="
+                              grid-template-columns: repeat(4, 1fr);
+                              gap: 6px;
+                              margin-bottom: 10px;
+                            "
+                          >
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">
+                                Total Referrals
+                              </div>
+                              <div class="stat-val" style="font-size: 0.9rem">842</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Pending</div>
+                              <div class="stat-val" style="font-size: 0.9rem">156</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Approved</div>
+                              <div class="stat-val" style="font-size: 0.9rem">648</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">In Review</div>
+                              <div class="stat-val" style="font-size: 0.9rem">38</div>
+                            </div>
+                          </div>
+                          <div class="dash-grid-2" style="gap: 8px; margin-bottom: 10px">
+                            <div class="chart-card" style="padding: 10px">
+                              <h3 style="font-size: 0.6rem; margin-bottom: 8px">Status Overview</h3>
+                              <div class="line-chart-container">
+                                <svg class="line-chart-svg" viewBox="0 0 200 60">
+                                  <defs>
+                                    <linearGradient id="gradient-teal" x1="0" y1="0" x2="0" y2="1">
+                                      <stop offset="0%" stop-color="var(--teal)" />
+                                      <stop
+                                        offset="100%"
+                                        stop-color="var(--teal)"
+                                        stop-opacity="0"
+                                      />
+                                    </linearGradient>
+                                  </defs>
+                                  <path
+                                    class="chart-area chart-area-teal"
+                                    d="M0,60 L0,50 Q25,55 50,30 T100,45 T150,15 T200,25 L200,60 Z"
+                                  />
+                                  <path
+                                    class="chart-line chart-line-teal"
+                                    d="M0,50 Q25,55 50,30 T100,45 T150,15 T200,25"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
+                            <div class="table-card" style="padding: 10px">
+                              <h3 style="font-size: 0.6rem; margin-bottom: 8px">Recent Activity</h3>
+                              <div style="display: flex; flex-direction: column; gap: 4px">
+                                <div style="font-size: 0.55rem; color: #64748b">
+                                  • Referral R-5521 approved
+                                </div>
+                                <div style="font-size: 0.55rem; color: #64748b">
+                                  • New message from Dr. Patel
+                                </div>
+                                <div style="font-size: 0.55rem; color: #64748b">
+                                  • Doc upload: R-5523
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="table-card" style="padding: 10px">
+                            <h3 style="font-size: 0.6rem; margin-bottom: 6px">Recent Referrals</h3>
+                            <table class="dash-table">
+                              <thead>
+                                <tr>
+                                  <th style="font-size: 0.5rem">ID</th>
+                                  <th style="font-size: 0.5rem">Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td style="font-size: 0.55rem">R-5521 (Amy K.)</td>
+                                  <td>
+                                    <span
+                                      class="status-badge active"
+                                      style="font-size: 0.45rem; padding: 1px 4px"
+                                      >Approved</span
+                                    >
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="font-size: 0.55rem">R-5522 (Brian T.)</td>
+                                  <td>
+                                    <span
+                                      class="status-badge pending"
+                                      style="font-size: 0.45rem; padding: 1px 4px"
+                                      >Pending</span
+                                    >
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mac-base"></div>
+            </div>
+          </div>
+
+          <!-- Patient Portal -->
+          <div class="portal-card" data-reveal>
+            <div class="portal-info">
+              <div class="portal-badge purple">👤</div>
+              <h3 class="portal-title">Patient Portal</h3>
+              <p class="portal-desc">
+                Empower patients with transparency and easy access to their case information.
+              </p>
+              <ul class="portal-features">
+                <li class="portal-feat">View case status & updates</li>
+                <li class="portal-feat">Secure document sharing</li>
+                <li class="portal-feat">Message your care team</li>
+                <li class="portal-feat">Upload documents & forms</li>
+                <li class="portal-feat">Appointment & task reminders</li>
+              </ul>
+              <a href="#" class="btn btn-primary">Explore Patient Portal</a>
+            </div>
+
+            <div class="v-box">
+              <div class="mac-bezel" style="width: 100%">
+                <div class="mac-screen" style="grid-template-columns: 1fr; background: #f8fafc">
+                  <div
+                    class="hero-dashboard"
+                    style="
+                      height: 100%;
+                      border-radius: 0;
+                      box-shadow: none;
+                      display: flex;
+                      flex-direction: column;
+                    "
+                  >
+                    <div class="dash-header">
+                      <div class="dash-dot red"></div>
+                      <div class="dash-dot yellow"></div>
+                      <div class="dash-dot green"></div>
+                      <span class="dash-title">Patient Portal</span>
+                    </div>
+                    <div style="display: flex; flex: 1; overflow: hidden">
+                      <div class="dash-sidebar" style="width: 40px; padding: 15px 0; gap: 12px">
+                        <div class="sb-item active" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </div>
+                        <div class="sb-item" style="width: 24px; height: 24px">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                          >
+                            <path
+                              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="dash-main">
+                        <div class="dash-top" style="padding: 8px 12px">
+                          <div style="font-size: 0.6rem; font-weight: 600; color: var(--blue-900)">
+                            Welcome back, John!
+                          </div>
+                          <div
+                            style="
+                              width: 18px;
+                              height: 18px;
+                              border-radius: 50%;
+                              background: #e2e8f0;
+                            "
+                          ></div>
+                        </div>
+                        <div class="dash-body" style="padding: 10px">
+                          <div
+                            class="dash-stats"
+                            style="
+                              grid-template-columns: repeat(4, 1fr);
+                              gap: 6px;
+                              margin-bottom: 10px;
+                            "
+                          >
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Appointments</div>
+                              <div class="stat-val" style="font-size: 0.9rem">4</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Documents</div>
+                              <div class="stat-val" style="font-size: 0.9rem">12</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Messages</div>
+                              <div class="stat-val" style="font-size: 0.9rem">3</div>
+                            </div>
+                            <div class="stat-card" style="padding: 8px">
+                              <div class="stat-label" style="font-size: 0.5rem">Tasks</div>
+                              <div class="stat-val" style="font-size: 0.9rem">2</div>
+                            </div>
+                          </div>
+
+                          <div
+                            style="
+                              background: #fff;
+                              border-radius: 8px;
+                              padding: 10px;
+                              border: 1px solid var(--gray-100);
+                              margin-bottom: 8px;
+                            "
+                          >
+                            <div
+                              style="
+                                font-size: 0.6rem;
+                                font-weight: 700;
+                                color: var(--blue-900);
+                                margin-bottom: 4px;
+                              "
+                            >
+                              Upcoming Appointment
+                            </div>
+                            <div style="font-size: 0.55rem; color: var(--gray-600)">
+                              Dr. Chen · May 28, 2026 · 10:00 AM
+                            </div>
+                            <div style="margin-top: 6px; display: flex; gap: 4px">
+                              <span
+                                style="
+                                  font-size: 0.5rem;
+                                  background: var(--blue-100);
+                                  color: var(--blue-500);
+                                  padding: 1px 6px;
+                                  border-radius: 4px;
+                                  font-weight: 600;
+                                "
+                                >Confirmed</span
+                              >
+                            </div>
+                          </div>
+
+                          <div class="table-card" style="padding: 10px">
+                            <h3 style="font-size: 0.6rem; margin-bottom: 6px">Recent Documents</h3>
+                            <div style="display: flex; flex-direction: column; gap: 4px">
+                              <div
+                                style="
+                                  display: flex;
+                                  align-items: center;
+                                  gap: 6px;
+                                  padding: 6px;
+                                  background: var(--gray-50);
+                                  border-radius: 4px;
+                                  border: 1px solid var(--gray-100);
+                                "
+                              >
+                                <span style="font-size: 0.7rem">📄</span>
+                                <div style="flex: 1">
+                                  <div
+                                    style="
+                                      font-size: 0.55rem;
+                                      font-weight: 600;
+                                      color: var(--blue-900);
+                                    "
+                                  >
+                                    Medical Report
+                                  </div>
+                                  <div style="font-size: 0.45rem; color: var(--gray-400)">
+                                    Uploaded May 18
+                                  </div>
+                                </div>
+                                <span
+                                  style="
+                                    font-size: 0.5rem;
+                                    color: var(--blue-400);
+                                    font-weight: 600;
+                                  "
+                                  >View</span
+                                >
+                              </div>
+                              <div
+                                style="
+                                  display: flex;
+                                  align-items: center;
+                                  gap: 6px;
+                                  padding: 6px;
+                                  background: var(--gray-50);
+                                  border-radius: 4px;
+                                  border: 1px solid var(--gray-100);
+                                "
+                              >
+                                <span style="font-size: 0.7rem">📋</span>
+                                <div style="flex: 1">
+                                  <div
+                                    style="
+                                      font-size: 0.55rem;
+                                      font-weight: 600;
+                                      color: var(--blue-900);
+                                    "
+                                  >
+                                    Consent Form
+                                  </div>
+                                  <div style="font-size: 0.45rem; color: var(--gray-400)">
+                                    Uploaded May 15
+                                  </div>
+                                </div>
+                                <span
+                                  style="
+                                    font-size: 0.5rem;
+                                    color: var(--blue-400);
+                                    font-weight: 600;
+                                  "
+                                  >View</span
+                                >
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mac-base"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── WHY SECTION ───────────────────────────────────────── -->
+    <section class="why" id="why">
+      <div class="container">
+        <div class="why-header" data-reveal>
+          <span class="tag">Why Choose Us</span>
+          <h2 class="section-title" style="margin-top: 14px; margin-bottom: 14px">
+            Why Healthcare Professionals Choose <em>CaseClinical</em>
+          </h2>
+          <p class="section-sub">
+            Purpose-built for the unique demands of healthcare documentation and case management.
+          </p>
+        </div>
+        <div class="why-grid">
+          <div class="why-card" data-reveal data-delay="1">
+            <div class="why-num">01</div>
+            <h4>Built for Healthcare</h4>
+            <p>
+              Purpose-built workflows designed for healthcare professionals — not generic business
+              tools repurposed.
+            </p>
+          </div>
+          <div class="why-card" data-reveal data-delay="2">
+            <div class="why-num">02</div>
+            <h4>Reliable & Scalable</h4>
+            <p>
+              Secure, cloud-based platform that grows with your practice — from solo practitioners
+              to large networks.
+            </p>
+          </div>
+          <div class="why-card" data-reveal data-delay="3">
+            <div class="why-num">03</div>
+            <h4>Trusted & Compliant</h4>
+            <p>
+              HIPAA-compliant with industry-leading security and compliance built into every
+              feature.
+            </p>
+          </div>
+          <div class="why-card" data-reveal data-delay="4">
+            <div class="why-num">04</div>
+            <h4>Proven Efficiency</h4>
+            <p>
+              Reduce errors, improve accuracy, and save valuable time with intelligent automation.
+            </p>
+          </div>
+          <div class="why-card" data-reveal data-delay="5">
+            <div class="why-num">05</div>
+            <h4>Dedicated Support</h4>
+            <p>Responsive support team ready to help you succeed every step of the way.</p>
+          </div>
+          <div class="why-card" data-reveal data-delay="6">
+            <div class="why-num">06</div>
+            <h4>Continuous Innovation</h4>
+            <p>
+              We evolve with you — continuously delivering new features that matter most to your
+              practice.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── LOGOS ─────────────────────────────────────────────── -->
+    <section class="logos" data-reveal>
+      <div class="container">
+        <p class="logos-label">Trusted by Healthcare Professionals Nationwide</p>
+        <div class="logos-track">
+          <div class="logo-item">
+            <div class="logo-item-icon">🏥</div>
+            HealthFirst
+          </div>
+          <div class="logo-item">
+            <div class="logo-item-icon">💊</div>
+            CarePoint Solutions
+          </div>
+          <div class="logo-item">
+            <div class="logo-item-icon">🌐</div>
+            WellBridge
+          </div>
+          <div class="logo-item">
+            <div class="logo-item-icon">🔬</div>
+            MetroCare Network
+          </div>
+          <div class="logo-item">
+            <div class="logo-item-icon">🩺</div>
+            LifePath Healthcare
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CTA ───────────────────────────────────────────────── -->
+    <section class="cta-section" data-reveal>
+      <div class="container">
+        <div class="cta-inner">
+          <div class="cta-left">
+            <div class="cta-rocket">
+              <svg
+                version="1.1"
+                id="_x32_"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 512 512"
+                xml:space="preserve"
+                fill="#000000"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier">
+                  <style type="text/css">
+                    .st0 {
+                      fill: #1b5ffd;
+                    }
+                  </style>
+                  <g>
+                    <path
+                      class="st0"
+                      d="M127.083,247.824l50.031-76.906c0,0-74.734-29.688-109.547-3.078C32.755,194.465,0.005,268.184,0.005,268.184 l37.109,21.516C37.114,289.699,84.083,198.684,127.083,247.824z"
+                    ></path>
+                    <path
+                      class="st0"
+                      d="M264.177,384.918l76.906-50.031c0,0,29.688,74.734,3.078,109.547 c-26.625,34.797-100.344,67.563-100.344,67.563l-21.5-37.109C222.317,474.887,313.333,427.918,264.177,384.918z"
+                    ></path>
+                    <path
+                      class="st0"
+                      d="M206.692,362.887l-13.203-13.188c-24,62.375-80.375,49.188-80.375,49.188s-13.188-56.375,49.188-80.375 l-13.188-13.188c-34.797-6-79.188,35.984-86.391,76.766c-7.188,40.781-8.391,75.563-8.391,75.563s34.781-1.188,75.578-8.391 S212.692,397.684,206.692,362.887z"
+                    ></path>
+                    <path
+                      class="st0"
+                      d="M505.224,6.777C450.786-18.738,312.927,28.98,236.255,130.668c-58.422,77.453-89.688,129.641-89.688,129.641 l46.406,46.406l12.313,12.313l46.391,46.391c0,0,52.219-31.25,129.672-89.656C483.005,199.074,530.739,61.215,505.224,6.777z M274.63,237.371c-12.813-12.813-12.813-33.594,0-46.406s33.578-12.813,46.406,0.016c12.813,12.813,12.813,33.578,0,46.391 C308.208,250.184,287.442,250.184,274.63,237.371z M351.552,160.465c-16.563-16.578-16.563-43.422,0-59.984 c16.547-16.563,43.406-16.563,59.969,0s16.563,43.406,0,59.984C394.958,177.012,368.099,177.012,351.552,160.465z"
+                    ></path>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <div class="cta-text">
+              <h2>Ready to Transform Your Documentation?</h2>
+              <p>
+                Join thousands of healthcare professionals using CaseClinical to simplify
+                documentation and deliver better care.
+              </p>
+            </div>
+          </div>
+          <div class="cta-btns">
+            <a href="#" class="btn btn-blue">Get Started Free</a>
+            <a href="#" class="btn btn-blue-outline">Schedule a Demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FOOTER ────────────────────────────────────────────── -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-logo">
+              <a href="#" class="logo" style="color: var(--white)">
+                <div class="logo-icon">
+                  <img
+                    src="https://lwfiles.mycourse.app/6998c1942ae00ea301e17455-public/587ab8599acf12d5cecfd46cde144437.png"
+                    alt="CaseClinical Logo"
+                  />
+                </div>
+                <!-- <div>
+                  CaseClinical<br /><span class="logo-sub" style="color: rgba(255, 255, 255, 0.4)"
+                    >Documentation · By LearnWorlds</span
+                  >
+                </div> -->
+              </a>
+            </div>
+            <p class="footer-about">
+              CaseClinical is the leading documentation platform for healthcare professionals. Built
+              on LearnWorlds to deliver seamless learning and support.
+            </p>
+            <div class="footer-socials">
+              <a href="#" class="social-btn">in</a>
+              <a href="#" class="social-btn">f</a>
+              <a href="#" class="social-btn">𝕏</a>
+              <a href="#" class="social-btn">▶</a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h5>Documentation</h5>
+            <ul>
+              <li><a href="#">Getting Started</a></li>
+              <li><a href="#">User Guides</a></li>
+              <li><a href="#">API Reference</a></li>
+              <li><a href="#">Release Notes</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Resources</h5>
+            <ul>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Videos</a></li>
+              <li><a href="#">Webinars</a></li>
+              <li><a href="#">Blog</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Company</h5>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-newsletter">
+            <h5>Stay Updated</h5>
+            <p>Subscribe to our newsletter for tips, updates, and best practices.</p>
+            <div class="newsletter-form">
+              <input type="email" placeholder="Enter your email" />
+              <button type="button">
+                <svg
+                  viewBox="0 0 24 24"
+                  height="24"
+                  width="24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M1.265 4.42619C1.04293 2.87167 2.6169 1.67931 4.05323 2.31397L21.8341 10.1706C23.423 10.8727 23.423 13.1273 21.8341 13.8294L4.05323 21.686C2.6169 22.3207 1.04293 21.1283 1.265 19.5738L1.99102 14.4917C2.06002 14.0087 2.41458 13.6156 2.88791 13.4972L8.87688 12L2.88791 10.5028C2.41458 10.3844 2.06002 9.99129 1.99102 9.50829L1.265 4.42619ZM21.0257 12L3.2449 4.14335L3.89484 8.69294L12.8545 10.9328C13.9654 11.2106 13.9654 12.7894 12.8545 13.0672L3.89484 15.3071L3.2449 19.8566L21.0257 12Z"
+                      fill="#ffffff"
+                    ></path>
+                  </g>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© 2026 CaseClinical. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ─── NAVBAR SCROLL ──────────────────────────────────────
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 20);
+      });
+
+      // ─── SCROLL REVEAL ──────────────────────────────────────
+      const revealEls = document.querySelectorAll('[data-reveal]');
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+      );
+      revealEls.forEach((el) => observer.observe(el));
+
+      // ─── COUNT UP ───────────────────────────────────────────
+      function animateCount(el, target, duration = 1800) {
+        let start = 0;
+        const step = (timestamp) => {
+          if (!start) start = timestamp;
+          const progress = Math.min((timestamp - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.floor(eased * target).toLocaleString();
+          if (progress < 1) requestAnimationFrame(step);
+          else el.textContent = target.toLocaleString();
+        };
+        requestAnimationFrame(step);
+      }
+
+      const statObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const target = parseInt(entry.target.dataset.target);
+              animateCount(entry.target, target);
+              statObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+      document.querySelectorAll('.count-up').forEach((el) => statObserver.observe(el));
+
+      // ─── PHONE BAR ANIMATION ────────────────────────────────
+      const barObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setTimeout(() => {
+                document.getElementById('phone-bar-fill').style.width = '78%';
+              }, 600);
+              barObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+      const phoneFill = document.getElementById('phone-bar-fill');
+      if (phoneFill) barObserver.observe(phoneFill);
+
+      // ─── DONUT ARCS STAGGER ────────────────────────────────
+      const donutObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const circles = entry.target.querySelectorAll('.segment');
+              const radius = 45;
+              const circumference = 2 * Math.PI * radius;
+              let accumulatedPercent = 0;
+
+              circles.forEach((circle, index) => {
+                const percent = Number(circle.dataset.percent);
+                const dashLength = (percent / 100) * circumference;
+                const gapLength = circumference - dashLength;
+
+                circle.style.strokeDasharray = `${dashLength} ${gapLength}`;
+                circle.style.strokeDashoffset = circumference;
+
+                const offset = circumference * (1 - accumulatedPercent / 100);
+                accumulatedPercent += percent;
+
+                setTimeout(() => {
+                  circle.style.strokeDashoffset = offset;
+                }, index * 200);
+              });
+              donutObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+
+      const donutChart = document.querySelector('.donut-container');
+      if (donutChart) donutObserver.observe(donutChart);
+      // ─── HAMBURGER ─────────────────────────────────────────
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const body = document.body;
+
+      hamburger.addEventListener('click', function () {
+        this.classList.toggle('open');
+        mobileMenu.classList.toggle('active');
+        body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+      });
+
+      // Close mobile menu when a link is clicked
+      const mobileMenuLinks = document.querySelectorAll('.mobile-links a, .mobile-cta a');
+      mobileMenuLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          hamburger.classList.remove('open');
+          mobileMenu.classList.remove('active');
+          body.style.overflow = '';
+        });
+      });
+
+      // ─── ACTIVE NAV LINK ───────────────────────────────────
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-links a');
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach((s) => {
+          if (window.scrollY >= s.offsetTop - 120) current = s.id;
+        });
+        navLinks.forEach((link) => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+        });
+      });
+    </script>
+  </body>
+</html>
