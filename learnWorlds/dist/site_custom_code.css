@@ -222,6 +222,13 @@
     border-color 0.35s,
     box-shadow 0.35s;
 }
+.learnworlds-editor .lw-caseclinical-wrapper .navbar {
+  position: absolute;
+  top: 0;
+}
+.learnworlds-editor .lw-caseclinical-wrapper .mobile-menu {
+  display: none !important;
+}
 .lw-caseclinical-wrapper .navbar-inner {
   display: flex;
   align-items: center;
@@ -934,6 +941,51 @@
   font-family: var(--font-display);
 }
 
+.lw-caseclinical-wrapper .dash-body {
+  padding: 10px;
+}
+.lw-caseclinical-wrapper .stat-label {
+  font-size: 0.5rem;
+  color: var(--gray-500);
+  margin-bottom: 4px;
+}
+.lw-caseclinical-wrapper .stat-val {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--blue-900);
+}
+.lw-caseclinical-wrapper .doc-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: var(--gray-50);
+  border-radius: 6px;
+  border: 1px solid var(--gray-100);
+  margin-bottom: 6px;
+}
+.lw-caseclinical-wrapper .doc-icon {
+  font-size: 0.9rem;
+}
+.lw-caseclinical-wrapper .doc-info {
+  flex: 1;
+}
+.lw-caseclinical-wrapper .doc-name {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--blue-900);
+}
+.lw-caseclinical-wrapper .doc-date {
+  font-size: 0.48rem;
+  color: var(--gray-400);
+}
+.lw-caseclinical-wrapper .doc-action {
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: var(--blue-500);
+}
+
 /* ─── WHY SECTION ────────────────────────────────────────── */
 .lw-caseclinical-wrapper .why {
   padding-top: 100px;
@@ -1436,3 +1488,51 @@
     padding: 28px 24px;
   }
 }
+
+/* === LearnWorlds Editability Overrides === */
+
+/* Make all editable elements show a pointer cursor and subtle outline on hover */
+.lw-caseclinical-wrapper .learnworlds-element[contenteditable='true'] {
+  cursor: text;
+  transition: outline 0.2s ease;
+}
+
+.lw-caseclinical-wrapper .learnworlds-element[contenteditable='true']:hover {
+  outline: 2px dashed rgba(27, 95, 253, 0.35);
+  outline-offset: 2px;
+}
+
+.lw-caseclinical-wrapper .learnworlds-element[contenteditable='true']:focus {
+  outline: 2px solid rgba(27, 95, 253, 0.6);
+  outline-offset: 2px;
+}
+
+/* Buttons: pointer cursor on the outer <a>, text cursor on inner span */
+.lw-caseclinical-wrapper a.learnworlds-element[data-node-type='button'] {
+  cursor: pointer;
+}
+
+.lw-caseclinical-wrapper
+  a.learnworlds-element[data-node-type='button']
+  > span[contenteditable='true'] {
+  cursor: text;
+}
+
+/* Ensure emoji icons are clickable/editable */
+.lw-caseclinical-wrapper .feat-icon[contenteditable='true'],
+.lw-caseclinical-wrapper .portal-badge[contenteditable='true'],
+.lw-caseclinical-wrapper .logo-item-icon[contenteditable='true'],
+.lw-caseclinical-wrapper .doc-icon[contenteditable='true'] {
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* Social buttons editability */
+.lw-caseclinical-wrapper .social-btn[contenteditable='true'] {
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* === End Editability Overrides === */
